@@ -5,7 +5,7 @@ import cors from "cors"
 import  PlantModel from "./planetarySchema/planetarySchema.js"
 
 dotenv.config()
-const port= 8080;
+const port= process.env.PORT||8080;
 const app=express();
 app.use(cors())
 
@@ -27,20 +27,18 @@ res.send("Welcome to CitizenRaf Plantery API")
 
 //Plantery API rout
  app.get("/plantsInfor",async(req,res)=>{
+     try {
      const plants=await PlantModel.find({})
+        
+       res.status(200).json(plants)
      
-     if(plants){
-   return  res.status(200).json({
-      message:"All plants infor fetched from DB",
-      data:plants
+       
+     } catch (error) {
+       
+      res.status(400).json(error)
 
-      
-     })}else{
-       return res.status(404).json({
-         message:"failed to fetch plants infor from DB"
-       })
-
-     }           
+     }
+         
  });
 
  ////post plants infor to Db
